@@ -41,3 +41,8 @@ if st.button("Cevabı Göster"):
 
 st.markdown("---")
 st.caption("Bu uygulama, Köksal Gürkan Koçluk web sitesine dayalı örnek bir RAG tabanlı chatbot projesidir.")
+
+# DEBUG: Veritabanı kayıt sayısını logla
+client = chromadb.PersistentClient(path="chroma_db")
+collection = client.get_or_create_collection("kgk_chatbot")
+print(f"DEBUG >>> ChromaDB kayıt sayısı: {collection.count()}")
