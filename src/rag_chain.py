@@ -3,60 +3,57 @@ import os
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-# Kalıcı ChromaDB dizini
 PERSIST_DIR = os.path.join("chroma_db")
-
-# Aynı embedding modeli
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
-# ChromaDB'ye bağlan
+# Chroma bağlan
 client = chromadb.PersistentClient(path=PERSIST_DIR)
 collection = client.get_or_create_collection("kgk_chatbot")
 
 def retrieve_answer(user_question, k=3):
     """
-    Kullanıcının sorusuna en yakın yanıtı döndürür.
-    Boş sonuç durumunda kullanıcıya anlamlı bir mesaj verir.
+    Kullanıcı sorgusunu embed edip Chroma'da arama yapar.
+    Eğer sonuç yoksa uygun mesaj verir; varsa en yakın sonucu alır.
     """
-    # Soru embedding'i oluştur
-    query_emb = embedder.encode(user_question).tolist()
-    
-    # ChromaDB sorgusu
+    if not user_question or user_question.strip() == "":
+        return "Lütfen bir soru yazın."
+
+    q_emb = embedder.encode(user_question).tolist()
+
+    # collection.query döndürülen yapıya dikkat et
     results = collection.query(
-        query_embeddings=[query_emb],
+        query_embeddings=[q_emb],
         n_results=k,
         include=["documents", "distances"]
     )
 
-    docs = results["documents"][0]  # Arama sonucu doküman listesi
-    distances = results["distances"][0]
+    docs = []
+    distances = []
+    try:
+        docs = results.get("documents", [[]])[0]
+        distances = results.get("distances", [[]])[0]
+    except Exception:
+        docs = []
 
-    # Eğer sonuç yoksa kullanıcıya bilgilendirici mesaj dön
-    if not docs or len(docs) == 0:
+    if not docs:
+        # fallback: yakın eşleşme yok
         return (
             f"**Soru:** {user_question}\n\n"
             "Üzgünüm, bu konuda elimde bir bilgi yok. "
             "Lütfen farklı bir soru deneyin veya web sitemi inceleyin."
         )
 
-    # En yakın cevabı al
-    best_text = docs[0]
-
-    # Koçluk formatında döndür
-    return format_coaching_answer(user_question, best_text)
-
-def format_coaching_answer(user_question, doc_text):
-    """
-    Bulunan cevabı koçluk diline uygun sade bir biçimde döndürür.
-    """
-    if "Cevap:" in doc_text:
-        answer = doc_text.split("Cevap:", 1)[1].strip()
+    # en yakın dokümanı al
+    best_doc = docs[0]
+    # docs içinde 'Soru: ...\\nCevap: ...' formatında kayıt var — Cevap kısmını ayıklayalım
+    if "Cevap:" in best_doc:
+        answer = best_doc.split("Cevap:", 1)[1].strip()
     else:
-        answer = doc_text.strip()
+        answer = best_doc.strip()
 
     response = (
         f"**Soru:** {user_question}\n\n"
         f"**Cevap:** {answer}\n\n"
-        "Eğer bu konuda daha fazla bilgi almak istersen, web sitemi detaylı inceleyebilirsin."
+        "Eğer daha kapsamlı bir destek istersen, koçluk görüşmeleri hakkında bilgi almak için web sitemi ziyaret edebilirsin."
     )
     return response
