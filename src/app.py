@@ -23,8 +23,7 @@ if not os.path.exists(PERSIST_DIR) or not os.listdir(PERSIST_DIR):
     with st.spinner("Veri tabanı hazırlanıyor..."):
         create_chroma_db()
     st.success("Veri tabanı oluşturuldu. ✅")
-else:
-    st.info("Veri tabanı yüklü ✅")
+
 
 # 🔹 Kullanıcıdan soru al
 user_q = st.text_input("Sorunuzu yazın:", key="user_input")
