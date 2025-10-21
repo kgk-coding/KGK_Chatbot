@@ -1,6 +1,6 @@
 # src/app.py
 import streamlit as st
-from src.rag_chain import retrieve_answer
+from rag_chain import retrieve_answer
 from src.ingest import create_chroma_db
 import os
 
