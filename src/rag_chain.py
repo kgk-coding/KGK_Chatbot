@@ -1,7 +1,6 @@
 # src/rag_chain.py
 import os
 import chromadb
-from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
 
 PERSIST_DIR = os.path.join("chroma_db")
@@ -10,7 +9,7 @@ PERSIST_DIR = os.path.join("chroma_db")
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
 # Chroma'ya bağlan
-client = chromadb.Client(Settings(chroma_db_impl="duckdb+parquet", persist_directory=PERSIST_DIR))
+client = chromadb.PersistentClient(path=PERSIST_DIR)
 collection = client.get_or_create_collection("kgk_chatbot")
 
 def retrieve_answer(user_question, k=3):
