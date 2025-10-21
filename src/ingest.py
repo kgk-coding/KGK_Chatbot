@@ -47,7 +47,7 @@ def create_chroma_db():
             questions.append(doc_text)  # embedding için aynı metin kullanıyoruz
 
     if not documents:
-        print("⚠️ data/soru_cevap.md içinde hiç geçerli kayıt bulunamadı.")
+        print("data/soru_cevap.md içinde hiç geçerli kayıt bulunamadı.")
         return
 
     embeddings = embedder.encode(questions).tolist()
