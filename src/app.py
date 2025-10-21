@@ -1,9 +1,10 @@
 # src/app.py
-
 import streamlit as st
-import os
-from ingest import create_chroma_db
 from rag_chain import retrieve_answer
+from ingest import create_chroma_db
+import os
+import chromadb
+
 
 # Sayfa ayarları
 st.set_page_config(page_title="Köksal Gürkan Koçluk Chatbot", page_icon="💬")
