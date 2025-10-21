@@ -1,37 +1,39 @@
 # src/app.py
+
 import streamlit as st
-from rag_chain import retrieve_answer
-from ingest import create_chroma_db
 import os
 import chromadb
+from ingest import create_chroma_db, debug_print_collection_info
+from rag_chain import retrieve_answer
 
-
-# DEBUG: Veritabanı kayıt sayısını logla
-client = chromadb.PersistentClient(path="chroma_db")
-collection = client.get_or_create_collection("kgk_chatbot")
-print(f"DEBUG >>> ChromaDB kayıt sayısı: {collection.count()}")
-
-# Sayfa ayarları
 st.set_page_config(page_title="Köksal Gürkan Koçluk Chatbot", page_icon="💬")
 
-# Başlık ve açıklama
 st.title("💬 Köksal Gürkan Koçluk Chatbot")
 st.write(
     "Merhaba 👋 Ben Köksal Gürkan Koçluk için oluşturulmuş koçluk odaklı Chatbot'um. "
     "Koçlukla ilgili temel bilgiler, süreçler, akış, koçluğa uygunluk ve benzeri konularda merak ettiklerini sorabilirsin."
 )
 
-# ChromaDB dizin yolu
 PERSIST_DIR = os.path.join("chroma_db")
 
-# 🔹 Her zaman ChromaDB kontrolü (boşsa yeniden oluşturur)
+# Veri tabanı yoksa veya boşsa oluştur (sessiz, kullanıcıya mesaj gösterme istemiyorsun)
 if not os.path.exists(PERSIST_DIR) or not os.listdir(PERSIST_DIR):
-    with st.spinner("Veri tabanı hazırlanıyor..."):
+    with st.spinner("Veritabanı hazırlanıyor..."):
         create_chroma_db()
-    st.success("Veri tabanı oluşturuldu. ✅")
+# (Bilgi mesajı göstermiyoruz - talebine göre gizledim)
 
+st.markdown("---")
 
-# 🔹 Kullanıcıdan soru al
+# DEBUG bölümü (isteğe bağlı) - sadece geliştirirken aktifleştir
+with st.expander("Geliştirici / Debug Kontrolleri (isteğe bağlı)"):
+    if st.button("Veritabanı bilgilerini göster"):
+        info = debug_print_collection_info()
+        st.json(info)
+    st.write("Not: Bu paneli test bitince kaldırabilirsin.")
+
+st.markdown("---")
+
+# Kullanıcı girişi
 user_q = st.text_input("Sorunuzu yazın:", key="user_input")
 
 if st.button("Cevabı Göster"):
