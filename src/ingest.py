@@ -1,72 +1,69 @@
 # src/ingest.py
 import os
+import re
 import chromadb
 from sentence_transformers import SentenceTransformer
 
 PERSIST_DIR = os.path.join("chroma_db")
 DATA_PATH = os.path.join("data", "soru_cevap.md")
 
-# embedding modeli
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
 def create_chroma_db():
     """
-    Eğer koleksiyon boş ise data dosyasını okuyup Chroma'ya ekler.
-    Her kayıt için 'Soru: ...\\nCevap: ...' formatını document olarak ekliyoruz,
-    embedding de aynı metinden üretilir — sorgu ile uyumlu olması için.
+    data/soru_cevap.md içindeki soru-cevap çiftlerini algılayıp Chroma'ya ekler.
+    Regex kullanıldığı için satır boşluklarından veya format farklarından etkilenmez.
     """
     os.makedirs(PERSIST_DIR, exist_ok=True)
     client = chromadb.PersistentClient(path=PERSIST_DIR)
     collection = client.get_or_create_collection("kgk_chatbot")
 
-    # Eğer zaten kayıt varsa yeniden ekleme
     try:
         count = collection.count()
     except Exception:
         count = 0
 
+    # Veritabanı zaten doluysa tekrar yükleme
     if count and count > 0:
-        # zaten dolu ise sessizce çık
+        print(f"ℹ️ ChromaDB zaten dolu ({count} kayıt var).")
         return
 
-    # Dosyayı oku
+    if not os.path.exists(DATA_PATH):
+        print("⚠️ data/soru_cevap.md bulunamadı.")
+        return
+
     with open(DATA_PATH, "r", encoding="utf-8") as f:
         content = f.read()
 
-    entries = content.split("**Soru:**")[1:]
-    documents = []
-    questions = []
+    # Regex ile soru-cevap bloklarını yakala
+    pattern = r"\*\*Soru:\*\*\s*(.*?)\s*\*\*Cevap:\*\*\s*(.*?)(?=\n\s*\*\*Soru:\*\*|$)"
+    matches = re.findall(pattern, content, re.DOTALL)
 
-    for entry in entries:
-        if "**Cevap:**" in entry:
-            q_part, a_part = entry.split("**Cevap:**", 1)
-            question = q_part.strip().replace("\n", " ")
-            answer = a_part.strip()
-            doc_text = f"Soru: {question}\nCevap: {answer}"
-            documents.append(doc_text)
-            questions.append(doc_text)  # embedding için aynı metin kullanıyoruz
-
-    if not documents:
-        print("data/soru_cevap.md içinde hiç geçerli kayıt bulunamadı.")
+    if not matches:
+        print("⚠️ Dosyada soru-cevap yapısı bulunamadı. Formatı kontrol et.")
         return
 
-    embeddings = embedder.encode(questions).tolist()
+    documents, embeddings, ids = [], [], []
 
-    # ids - basit, deterministic id'ler
-    ids = [f"q_{i}" for i in range(len(documents))]
+    for i, (question, answer) in enumerate(matches):
+        question = question.strip().replace("\n", " ")
+        answer = answer.strip()
+        doc_text = f"Soru: {question}\nCevap: {answer}"
+        documents.append(doc_text)
+        embeddings.append(embedder.encode(doc_text).tolist())
+        ids.append(f"q_{i}")
 
     collection.add(
         ids=ids,
         documents=documents,
         embeddings=embeddings
     )
-
     client.persist()
-    print(f"✅ ChromaDB'ye {len(documents)} kayıt eklendi.")
+    print(f"✅ {len(documents)} kayıt başarıyla ChromaDB'ye eklendi.")
 
 def debug_print_collection_info():
     """
-    Debug için collection sayısı ve birkaç sample döner (log ve UI için kullan).
+    Debug için ChromaDB'deki kayıt sayısı ve örnek kayıtları döndürür.
     """
     client = chromadb.PersistentClient(path=PERSIST_DIR)
     collection = client.get_or_create_collection("kgk_chatbot")
@@ -75,10 +72,9 @@ def debug_print_collection_info():
     except Exception:
         count = 0
 
-    # birkaç örnek al (güvenli)
     sample_docs = []
     if count > 0:
-        res = collection.get(n=5, include=["documents", "metadatas", "ids"])
+        res = collection.get(limit=3, include=["documents"])
         sample_docs = res.get("documents", [])
 
     return {"count": count, "sample_documents": sample_docs}
