@@ -1,7 +1,7 @@
 # src/app.py
 import streamlit as st
 from rag_chain import retrieve_answer
-from src.ingest import create_chroma_db
+from ingest import create_chroma_db
 import os
 
 st.set_page_config(page_title="Köksal Gürkan Koçluk Chatbot", page_icon="💬")
