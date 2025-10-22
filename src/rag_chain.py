@@ -1,21 +1,19 @@
-import os
 import json
+import os
 
-# JSON dosyasının yolu
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-json_path = os.path.join(BASE_DIR, "soru_cevap.json")
+# Repo kökünden JSON dosya yolu
+json_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "soru_cevap.json")
 
 with open(json_path, "r", encoding="utf-8") as f:
     faq_data = json.load(f)
 
-def retrieve_answer(query: str) -> str:
-    query_lower = query.lower()
-
-    # Soru kelimelerine göre basit eşleştirme
+def retrieve_answer(user_question):
+    user_question_lower = user_question.lower()
+    
     for item in faq_data:
-        soru_lower = item["soru"].lower()
-        if any(word in query_lower for word in soru_lower.split()):
+        question_lower = item["soru"].lower()
+        if question_lower in user_question_lower or user_question_lower in question_lower:
             return f"Cevap: {item['cevap']}"
-
-    # Hiçbir uygun cevap bulunamazsa
+    
+    # Hiçbir uygun eşleşme yoksa
     return "Cevap: Sorunuzu tam olarak cevaplayamıyorum. Lütfen daha detaylı sorar mısınız?"
