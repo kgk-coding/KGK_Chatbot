@@ -9,7 +9,7 @@ Data seti tamamen https://www.koksalgurkan.com.tr/ sitesi ve kişisel deneyimler
 - **Proje Adı:** Koçluk için Chatbot  
 - **Amaç:** RAG (Retrieval Augmented Generation) mantığıyla bilgiye dayalı yanıtlar üretmek.  
 - **Veri:** `data/embeddings.json` (Özel hazırlanmış soru-cevap çiftlerinden lokalde oluşturulmuş json veri dosyası.)
-- **Model:** `sentence-transformers (all-MiniLM-L6-v2)`  
+- **Model:** ``  
 - **Vektör DB:** Chroma (lokal persist directory)  
 - **Web Arayüzü:** Streamlit  
 - **Bulut Ortamı:** [Streamlit Community Cloud](https://streamlit.app)
