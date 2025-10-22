@@ -22,4 +22,5 @@ if user_input:
 
 st.markdown("---")
 st.caption("Bu uygulama, [Köksal Gürkan Koçluk](https://www.koksalgurkan.com.tr/) web sitesine dayalı örnek bir RAG tabanlı chatbot projesidir.")
+st.caption("© 2025 Köksal Gürkan Koçluk — Tüm hakları saklıdır.")
 
