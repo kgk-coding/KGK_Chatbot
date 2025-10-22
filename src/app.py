@@ -1,11 +1,22 @@
 # src/app.py
 
-import streamlit as st
+import sys
 import os
+
+# -----------------------------
+# Modül yolu ayarı
+# -----------------------------
+# app.py hangi dizinde olursa olsun src içindeki modülleri bulabilmesi için
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+import streamlit as st
 import chromadb
 from ingest import create_chroma_db, debug_print_collection_info
 from rag_chain import retrieve_answer
 
+# -----------------------------
+# Sayfa başlığı ve ikon
+# -----------------------------
 st.set_page_config(page_title="Köksal Gürkan Koçluk Chatbot", page_icon="💬")
 
 st.title("💬 Köksal Gürkan Koçluk Chatbot")
@@ -14,18 +25,20 @@ st.write(
     "Koçlukla ilgili temel bilgiler, süreçler, akış, koçluğa uygunluk ve benzeri konularda merak ettiklerini sorabilirsin."
 )
 
+# -----------------------------
+# Chroma DB yolu ve oluşturulması
+# -----------------------------
 PERSIST_DIR = os.path.join("chroma_db")
 
-# Veri tabanı yoksa veya boşsa oluştur (sessiz, kullanıcıya mesaj gösterme istemiyorsun)
 if not os.path.exists(PERSIST_DIR) or not os.listdir(PERSIST_DIR):
     with st.spinner("Veritabanı hazırlanıyor..."):
         create_chroma_db()
-# (Bilgi mesajı göstermiyoruz - talebine göre gizledim)
 
 st.markdown("---")
 
-
-# DEBUG bölümü (isteğe bağlı) - sadece geliştirirken aktifleştir
+# -----------------------------
+# DEBUG / geliştirici paneli (opsiyonel)
+# -----------------------------
 with st.expander("Geliştirici / Debug Kontrolleri (isteğe bağlı)"):
     if st.button("Veritabanı bilgilerini göster"):
         info = debug_print_collection_info()
@@ -34,8 +47,9 @@ with st.expander("Geliştirici / Debug Kontrolleri (isteğe bağlı)"):
 
 st.markdown("---")
 
-
-# Kullanıcı girişi
+# -----------------------------
+# Kullanıcı giriş ve yanıt
+# -----------------------------
 user_q = st.text_input("Sorunuzu yazın:", key="user_input")
 
 if st.button("Cevabı Göster"):
