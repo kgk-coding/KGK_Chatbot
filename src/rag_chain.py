@@ -30,6 +30,6 @@ def retrieve_answer(user_question, similarity_threshold=0.5):
     best_score = similarities[0][best_idx]
 
     if best_score < similarity_threshold:
-        return "Cevap: Sorunuzu tam olarak cevaplayamıyorum. Lütfen daha detaylı sorar mısınız?"
+        return "Sorunuzu tam olarak cevaplayamıyorum. Lütfen daha detaylı sorar mısınız?"
 
     return faq_data[best_idx]["answer"]
