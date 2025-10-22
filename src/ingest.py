@@ -77,4 +77,6 @@ def debug_print_collection_info():
         res = collection.get(limit=3, include=["documents"])
         sample_docs = res.get("documents", [])
 
-    return {"count": count, "sample_documents": sample_docs}
+    info = {"count": count, "sample_documents": sample_docs}
+    print(f"DEBUG >>> {info}")
+    return info
