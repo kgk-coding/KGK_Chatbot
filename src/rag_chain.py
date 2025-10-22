@@ -1,63 +1,33 @@
-# -*- coding: utf-8 -*-
-# src/rag_chain.py
-
 import json
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from sentence_transformers import SentenceTransformer
 
-# Modeli yükle
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-
-# Embed edilmiş verileri yükle
-with open("src/embeddings.json", "r", encoding="utf-8") as f:
+# JSON dosyasını yükle
+with open("data/embeddings.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
-if not data:
-    print("⚠️ Uyarı: embeddings.json dosyası boş!")
-else:
-    print(f"✅ {len(data)} doküman yüklendi.")
-
-# Embedding’leri ve metinleri hazırla
-texts = [item["document"] for item in data]
+# Dokümanlardan embedding ve metinleri ayır
+documents = [item["document"] for item in data]
 embeddings = np.array([item["embedding"] for item in data])
 
-
-def retrieve_answer(question, dialog_memory=None):
+def retrieve_answer(query_embedding, top_k=1):
     """
-    Kullanıcının sorusuna en uygun cevabı döndürür.
-    dialog_memory: önceki soru-cevap çiftlerini tutar (isteğe bağlı)
+    Soru embedding'ini alır, cosine similarity ile en benzer dokümanı bulur.
     """
-
-    # Eğer hafızada benzer bir soru varsa önce oraya bakalım
-    if dialog_memory:
-        for entry in reversed(dialog_memory[-3:]):  # son 3 etkileşimi kontrol et
-            if entry["question"].lower() == question.lower():
-                return f"Bunu az önce sormuştunuz: {entry['answer']}"
-
-    # Eğer veritabanı boşsa uyarı ver
     if embeddings.size == 0:
         return "Henüz veritabanında embed edilmiş bir doküman yok."
 
-    # Soruyu embed et
-    question_embedding = model.encode([question])
+    # Cosine similarity hesapla
+    similarities = cosine_similarity([query_embedding], embeddings)[0]
+    top_indices = similarities.argsort()[-top_k:][::-1]
 
-    # Benzerlikleri hesapla
-    similarities = cosine_similarity(question_embedding, embeddings)[0]
+    # En benzer dokümanı döndür
+    response = documents[top_indices[0]]
+    return response
 
-    # En benzer dokümanı bul
-    top_idx = np.argmax(similarities)
-    top_score = similarities[top_idx]
-    best_match = texts[top_idx]
-
-    # Eşik belirle (çok alakasızsa)
-    if top_score < 0.45:
-        return "Bu konuyla ilgili doğrudan bir bilgi bulamadım. Ne hakkında konuştuğunu biraz daha açar mısın?"
-
-    # Dokümandan cevabı çıkar
-    if "Cevap:" in best_match:
-        answer = best_match.split("Cevap:")[1].strip()
-    else:
-        answer = best_match
-
-    return answer
+def embed_query(query, embed_func):
+    """
+    Soru cümlesini embedding'e çevirir.
+    embed_func: embedding hesaplama fonksiyonu (örn: OpenAI veya SentenceTransformer)
+    """
+    return embed_func(query)
