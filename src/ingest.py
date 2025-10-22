@@ -4,8 +4,10 @@ import re
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-PERSIST_DIR = os.path.join("chroma_db")
-DATA_PATH = os.path.join("data", "soru_cevap.md")
+# 🔹 Dosya yolları mutlak hale getirildi
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PERSIST_DIR = os.path.join(BASE_DIR, "chroma_db")
+DATA_PATH = os.path.join(BASE_DIR, "data", "soru_cevap.md")
 
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -23,24 +25,22 @@ def create_chroma_db():
     except Exception:
         count = 0
 
-    # Veritabanı zaten doluysa tekrar yükleme
     if count and count > 0:
         print(f"ℹ️ ChromaDB zaten dolu ({count} kayıt var).")
         return
 
     if not os.path.exists(DATA_PATH):
-        print("⚠️ data/soru_cevap.md bulunamadı.")
+        print(f"⚠️ Veri dosyası bulunamadı: {DATA_PATH}")
         return
 
     with open(DATA_PATH, "r", encoding="utf-8") as f:
         content = f.read()
 
-    # Regex ile soru-cevap bloklarını yakala
     pattern = r"\*\*Soru:\*\*\s*(.*?)\s*\*\*Cevap:\*\*\s*(.*?)(?=\n\s*\*\*Soru:\*\*|$)"
     matches = re.findall(pattern, content, re.DOTALL)
 
     if not matches:
-        print("⚠️ Dosyada soru-cevap yapısı bulunamadı. Formatı kontrol et.")
+        print("⚠️ Dosyada soru-cevap yapısı bulunamadı.")
         return
 
     documents, embeddings, ids = [], [], []
@@ -53,11 +53,7 @@ def create_chroma_db():
         embeddings.append(embedder.encode(doc_text).tolist())
         ids.append(f"q_{i}")
 
-    collection.add(
-        ids=ids,
-        documents=documents,
-        embeddings=embeddings
-    )
+    collection.add(ids=ids, documents=documents, embeddings=embeddings)
     client.persist()
     print(f"✅ {len(documents)} kayıt başarıyla ChromaDB'ye eklendi.")
 
