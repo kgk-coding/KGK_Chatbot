@@ -3,26 +3,19 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Embed modelini yükle
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Embedding verilerini yükle
+# Embed dosyasını yükle
 with open("data/embeddings.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
-# Document embedlerini ve textleri ayır
 documents = [item["document"] for item in data]
 embeddings = np.array([item["embedding"] for item in data])
 
 def embed_query(query):
-    """Kullanıcı sorusunu embed eder"""
     return model.encode(query)
 
 def retrieve_answer(user_question, dialog_memory=None):
-    """
-    Soru-cevap retrieval fonksiyonu.
-    dialog_memory: Liste [{"user": "...", "bot": "..."}] formatında önceden sorulan sorular.
-    """
     if len(embeddings) == 0:
         return "Henüz veritabanında embed edilmiş bir doküman yok."
 
@@ -30,7 +23,6 @@ def retrieve_answer(user_question, dialog_memory=None):
     sim_scores = cosine_similarity(query_vec, embeddings)
     best_idx = np.argmax(sim_scores)
 
-    # Benzerlik çok düşükse alternatif cevap
     if sim_scores[0, best_idx] < 0.4:
         return "Bu konuyla ilgili doğrudan bir bilgi bulamadım. Ne hakkında konuştuğunu biraz daha açar mısın?"
 
