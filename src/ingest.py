@@ -48,14 +48,18 @@ def create_chroma_db():
         documents.append(doc_text)
 
         # Embed oluştur ve ChromaDB'ye ekle
-        embedding = embedder.encode(doc_text).tolist()
-        collection.add(
-            documents=[doc_text],
-            embeddings=[embedding],
-            ids=[f"doc_{i}"]
-        )
+        try:
+            embedding = embedder.encode(doc_text).tolist()
+            collection.add(
+                documents=[doc_text],
+                embeddings=[embedding],
+                ids=[f"doc_{i}"]
+            )
+            print(f"✅ {i+1}. doküman eklendi")
+        except Exception as e:
+            print(f"❌ Doküman eklenemedi: {e}")
 
-    print(f"✅ {len(documents)} doküman ChromaDB'ye eklendi.")
+    print(f"ℹ️ Toplam {len(documents)} doküman ChromaDB'ye işlendi.")
 
 # -----------------------------
 # Debug / koleksiyon bilgisi
