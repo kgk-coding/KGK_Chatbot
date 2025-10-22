@@ -24,6 +24,7 @@ if not os.path.exists(PERSIST_DIR) or not os.listdir(PERSIST_DIR):
 
 st.markdown("---")
 
+
 # DEBUG bölümü (isteğe bağlı) - sadece geliştirirken aktifleştir
 with st.expander("Geliştirici / Debug Kontrolleri (isteğe bağlı)"):
     if st.button("Veritabanı bilgilerini göster"):
@@ -32,6 +33,7 @@ with st.expander("Geliştirici / Debug Kontrolleri (isteğe bağlı)"):
     st.write("Not: Bu paneli test bitince kaldırabilirsin.")
 
 st.markdown("---")
+
 
 # Kullanıcı girişi
 user_q = st.text_input("Sorunuzu yazın:", key="user_input")
