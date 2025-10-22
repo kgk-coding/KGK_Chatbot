@@ -4,9 +4,8 @@ import sys
 import os
 
 # -----------------------------
-# Streamlit deploy uyumlu modül yolu ayarı
+# Streamlit deploy uyumlu modül yolu
 # -----------------------------
-# Streamlit her zaman repo kökünden çalıştırıyor, src dizinini Python path'e ekliyoruz
 src_dir = os.path.join(os.getcwd(), "src")
 if src_dir not in sys.path:
     sys.path.insert(0, src_dir)
@@ -28,7 +27,7 @@ st.write(
 )
 
 # -----------------------------
-# Chroma DB yolu ve oluşturulması
+# Chroma DB kontrol ve oluşturma
 # -----------------------------
 PERSIST_DIR = os.path.join(os.getcwd(), "chroma_db")
 
@@ -39,7 +38,7 @@ if not os.path.exists(PERSIST_DIR) or not os.listdir(PERSIST_DIR):
 st.markdown("---")
 
 # -----------------------------
-# DEBUG / geliştirici paneli (opsiyonel)
+# DEBUG paneli
 # -----------------------------
 with st.expander("Geliştirici / Debug Kontrolleri (isteğe bağlı)"):
     if st.button("Veritabanı bilgilerini göster"):
