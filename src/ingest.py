@@ -4,46 +4,31 @@ import re
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-# Klasör yollarını ayarla
+# -----------------------------
+# Klasör ve dosya yolları
+# -----------------------------
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC_DIR = os.path.dirname(os.path.abspath(__file__))
 PERSIST_DIR = os.path.join(BASE_DIR, "chroma_db")
 DATA_PATH = os.path.join(SRC_DIR, "soru_cevap.md")  # src klasöründe
 
+# Embed modeli
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
+# -----------------------------
+# ChromaDB oluşturma ve veri ekleme
+# -----------------------------
 def create_chroma_db():
-    """Markdown dosyasını okuyup ChromaDB oluşturur."""
+    """Markdown dosyasını okuyup ChromaDB oluşturur ve embed ekler."""
     os.makedirs(PERSIST_DIR, exist_ok=True)
     client = chromadb.PersistentClient(path=PERSIST_DIR)
     collection = client.get_or_create_collection("kgk_chatbot")
 
-    # === DEBUG BLOĞU ===
-    print("DEBUG >>> Çalışma dizini:", os.getcwd())
-    print("DEBUG >>> BASE_DIR:", BASE_DIR)
-    print("DEBUG >>> SRC_DIR:", SRC_DIR)
-    print("DEBUG >>> Aranan dosya yolu:", DATA_PATH)
-    print("DEBUG >>> Dosya mevcut mu?", os.path.exists(DATA_PATH))
-    if os.path.exists(DATA_PATH):
-        print("DEBUG >>> Dosya boyutu:", os.path.getsize(DATA_PATH))
-    else:
-        print("DEBUG >>> SRC dizininde mevcut dosyalar:", os.listdir(SRC_DIR))
-    # ====================
-
-    try:
-        count = collection.count()
-    except Exception:
-        count = 0
-
-    if count and count > 0:
-        print(f"ℹ️ ChromaDB zaten dolu ({count} kayıt var).")
-        return
-
+    # Dosya mevcut değilse uyar
     if not os.path.exists(DATA_PATH):
         print(f"⚠️ Veri dosyası bulunamadı: {DATA_PATH}")
         return
 
-    # UTF-8-SIG ile aç (BOM karakterini yok sayar)
     with open(DATA_PATH, "r", encoding="utf-8-sig") as f:
         content = f.read()
 
@@ -56,17 +41,27 @@ def create_chroma_db():
         return
 
     documents = []
-    for question, answer in matches:
+    for i, (question, answer) in enumerate(matches):
         question = question.strip().replace("\n", " ")
         answer = answer.strip()
-        documents.append(f"Soru: {question}\nCevap: {answer}")
+        doc_text = f"Soru: {question}\nCevap: {answer}"
+        documents.append(doc_text)
 
-    # Örnek olarak koleksiyona ekleme
-    # (Kendi embed ve Chroma ekleme mantığını burada uygula)
-    print(f"✅ {len(documents)} doküman ChromaDB'ye hazır.")
+        # Embed oluştur ve ChromaDB'ye ekle
+        embedding = embedder.encode(doc_text).tolist()
+        collection.add(
+            documents=[doc_text],
+            embeddings=[embedding],
+            ids=[f"doc_{i}"]
+        )
 
+    print(f"✅ {len(documents)} doküman ChromaDB'ye eklendi.")
+
+# -----------------------------
+# Debug / koleksiyon bilgisi
+# -----------------------------
 def debug_print_collection_info():
-    """ChromaDB koleksiyon bilgilerini döndürür (debug amaçlı)."""
+    """ChromaDB koleksiyon bilgilerini döndürür."""
     client = chromadb.PersistentClient(path=PERSIST_DIR)
     collection = client.get_or_create_collection("kgk_chatbot")
     try:
