@@ -29,6 +29,7 @@ def create_chroma_db():
         print(f"⚠️ Veri dosyası bulunamadı: {DATA_PATH}")
         return
 
+    # Dosya içeriğini oku
     with open(DATA_PATH, "r", encoding="utf-8-sig") as f:
         content = f.read()
 
@@ -37,7 +38,7 @@ def create_chroma_db():
     matches = re.findall(pattern, content, re.DOTALL)
 
     if not matches:
-        print("⚠️ Dosyada soru-cevap yapısı bulunamadı.")
+        print("⚠️ Dosyada regex ile eşleşen soru-cevap bulunamadı.")
         return
 
     documents = []
@@ -55,7 +56,7 @@ def create_chroma_db():
                 embeddings=[embedding],
                 ids=[f"doc_{i}"]
             )
-            print(f"✅ {i+1}. doküman eklendi")
+            print(f"✅ {i+1}. doküman eklendi: {question[:50]} ...")
         except Exception as e:
             print(f"❌ Doküman eklenemedi: {e}")
 
