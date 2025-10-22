@@ -3,27 +3,26 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
+# Modeli initialize edin (zaten varsa değiştirmeye gerek yok)
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Embed dosyasını yükle
-with open("data/embeddings.json", "r", encoding="utf-8") as f:
-    data = json.load(f)
+# Örnek veri: sorular ve cevaplar
+faq_data = [
+    {"question": "Koçluk almaya uygun muyum?", 
+     "answer": "Genelde çoğu kişi koçluk almaya uygundur. Ancak belirli referans durumları teyit etmemiz gerekir ki bundan emin olalım."}
+]
 
-documents = [item["document"] for item in data]
-embeddings = np.array([item["embedding"] for item in data])
-
-def embed_query(query):
-    return model.encode(query)
-
-def retrieve_answer(user_question, dialog_memory=None):
-    if len(embeddings) == 0:
-        return "Henüz veritabanında embed edilmiş bir doküman yok."
-
-    query_vec = embed_query(user_question).reshape(1, -1)
-    sim_scores = cosine_similarity(query_vec, embeddings)
-    best_idx = np.argmax(sim_scores)
-
-    if sim_scores[0, best_idx] < 0.4:
-        return "Bu konuyla ilgili doğrudan bir bilgi bulamadım. Ne hakkında konuştuğunu biraz daha açar mısın?"
-
-    return documents[best_idx]
+def retrieve_answer(user_question):
+    # Tüm soruları al
+    questions = [item["question"] for item in faq_data]
+    
+    # Embeddingleri al
+    question_embeddings = model.encode(questions)
+    user_embedding = model.encode([user_question])
+    
+    # Cosine similarity ile en yakın soruyu bul
+    similarities = cosine_similarity(user_embedding, question_embeddings)
+    best_idx = np.argmax(similarities)
+    
+    # Sadece cevabı dön (prefix eklemeyin)
+    return faq_data[best_idx]["answer"]
