@@ -4,7 +4,7 @@ from rag_chain import retrieve_answer
 st.set_page_config(page_title="KGK Koçluk Chatbot", layout="centered")
 st.title("KGK Koçluk Chatbot")
 st.write(
-    "Merhaba ߑˠBen Köksal Gürkan Koçluk için oluşturulmuş koçluk odaklı Chatbot'um. "
+    "Merhaba. Ben Köksal Gürkan Koçluk için oluşturulmuş koçluk odaklı Chatbot'um. "
     "Koçlukla ilgili temel bilgiler, süreçler, akış, koçluğa uygunluk ve benzeri konularda merak ettiklerini sorabilirsin."
     ""
 )
