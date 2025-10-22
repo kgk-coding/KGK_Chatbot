@@ -4,9 +4,9 @@ from rag_chain import retrieve_answer
 st.set_page_config(page_title="Koçluk Chatbot", layout="centered")
 st.title("Koçluk Chatbot")
 
-# Enter ile cevap alma
-user_input = st.text_input("Sorunuzu buraya yazın:")
+# Enter ile cevaplama
+user_input = st.text_input("Sorunuzu yazın ve Enter'a basın:")
 
 if user_input:
-    response = retrieve_answer(user_input)
-    st.write(response)
+    answer = retrieve_answer(user_input)
+    st.markdown(answer)
