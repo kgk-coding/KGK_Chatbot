@@ -8,7 +8,7 @@ Data seti tamamen https://www.koksalgurkan.com.tr/ sitesi ve kişisel deneyimler
 ## 🔹 Proje Özeti
 - **Proje Adı:** Koçluk için Chatbot  
 - **Amaç:** RAG (Retrieval Augmented Generation) mantığıyla bilgiye dayalı yanıtlar üretmek.  
-- **Veri:** `data/soru_cevap.md` (Özel hazırlanmış soru-cevap çiftleri, özgün içerik).  
+- **Veri:** `data/embeddings.json` (Özel hazırlanmış soru-cevap çiftlerinden lokalde oluşturulmuş json veri dosyası.)
 - **Model:** `sentence-transformers (all-MiniLM-L6-v2)`  
 - **Vektör DB:** Chroma (lokal persist directory)  
 - **Web Arayüzü:** Streamlit  
@@ -17,13 +17,24 @@ Data seti tamamen https://www.koksalgurkan.com.tr/ sitesi ve kişisel deneyimler
 ## 🔹 Dosya Yapısı
 
 KGK_Chatbot/
-├─ data/soru_cevap.md
+│
 ├─ src/
-│ ├─ ingest.py
-│ ├─ rag_chain.py
-│ └─ app.py
+│   ├─ __init__.py
+│   ├─ app.py                # Streamlit uygulaması
+│   ├─ rag_chain.py          # Embed ve retrieval mantığı
+│   └─ local_embed_create.py # JSON embed dosyası oluşturma
+│
+├─ data/
+│   └─ embeddings.json       # Lokalde ürettiğimm embed dosyası
+│
+├─ chroma_db/
+│   └─ .keep                 # Boş klasör için git track
+│
 ├─ requirements.txt
+├─ runtime.txt
+├─ .gitignore
 └─ README.md
+
 
 
 ## 🔹 Nasıl Çalışır
