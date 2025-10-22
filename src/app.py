@@ -1,17 +1,18 @@
 import streamlit as st
-from rag_chain import retrieve_answer
+from src.rag_chain import retrieve_answer
 
-st.title("Koçluk Chatbot (Streamlit)")
+st.set_page_config(page_title="Koçluk Chatbot", page_icon="🤖")
+st.title("Koçluk Chatbot (Cloud)")
 
-if "history" not in st.session_state:
-    st.session_state.history = []
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
 user_input = st.text_input("Sorunuzu yazın:")
 
-if user_input:
+if st.button("Gönder") and user_input:
     answer = retrieve_answer(user_input)
-    st.session_state.history.append((user_input, answer))
+    st.session_state.chat_history.append({"user": user_input, "bot": answer})
 
-for q, a in st.session_state.history:
-    st.markdown(f"**Soru:** {q}")
-    st.markdown(f"**Cevap:** {a}")
+for chat in st.session_state.chat_history:
+    st.markdown(f"**Sen:** {chat['user']}")
+    st.markdown(f"**Bot:** {chat['bot']}")
