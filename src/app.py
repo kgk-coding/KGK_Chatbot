@@ -3,7 +3,7 @@
 import streamlit as st
 import os
 import chromadb
-from ingest import create_chroma_db, debug_print_collection_info
+from src.ingest import create_chroma_db, debug_print_collection_info
 from rag_chain import retrieve_answer
 
 st.set_page_config(page_title="Köksal Gürkan Koçluk Chatbot", page_icon="💬")
