@@ -4,8 +4,9 @@ from rag_chain import retrieve_answer
 st.set_page_config(page_title="Koçluk Chatbot", layout="centered")
 st.title("Koçluk Chatbot")
 
-user_input = st.text_input("Sorunuzu yazın:")
+# Streamlit text_input, Enter ile submit olacak şekilde
+user_question = st.text_input("Sorunuzu yazın ve Enter'a basın:")
 
-if st.button("Cevapla") and user_input:
-    answer = retrieve_answer(user_input)
+if user_question:
+    answer = retrieve_answer(user_question)
     st.markdown(f"**Cevap:** {answer}")
