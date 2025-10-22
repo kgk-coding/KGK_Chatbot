@@ -14,9 +14,11 @@ Nihai çalışma Github+Streamlit ile oldu. Buna lokal Visual Studio ve lokal Py
 
 Arada Türkçe'den kaynaklı UTF8 ile ilgili sorunlarla da boğuştum.
 
-ChatGPT'de aynı hataları tekrarlattı ve zaman kaybettirdi.
+ChatGPT'de aynı hataları tekrarlattı ve zaman kaybettirdi. Hataları tekrar tekrar paylaşım doğrusunu alıp kodu güncelledim.
 
 Nihayet biraz da benim ChatGPT'yi yönlendirmemle kodu çalıştırmayı başardım.
+
+Tüm ChatGPT yazışmalarım kayıtlı duruyor. GÖrünen commit history'den onlarca kat fazla silip yeniden yapma işim oldu.
 
 Son bir saat içinde README.md oluşturup proje teslim formuna yöneldim.
 
