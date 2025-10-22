@@ -6,6 +6,6 @@ st.title("Koçluk Chatbot")
 
 user_input = st.text_input("Sorunuzu yazın:")
 
-if user_input:
+if st.button("Cevapla") and user_input:
     answer = retrieve_answer(user_input)
-    st.write("Cevap:", answer)  # sadece cevabı gösteriyoruz
+    st.markdown(f"**Cevap:** {answer}")
