@@ -37,21 +37,35 @@ KGK_Chatbot/
 
 
 
-## 🔹 Nasıl Çalışır
-1. `soru_cevap.md` dosyası okunur.
-2. Soru-cevap çiftleri embedding’e dönüştürülür.
-3. Chroma veritabanına kaydedilir.
-4. Kullanıcı bir soru girdiğinde, en benzer kayıtlar sorgulanır.
-5. En uygun yanıt kullanıcıya sunulur.
+# KGK Chatbot
 
-## 🔹 Çalıştırma (Streamlit Cloud)
-1. Bu repo'yu GitHub'da açın.
-2. [Streamlit Cloud](https://share.streamlit.io/) hesabınızla yeni bir app oluşturun.
-3. “Main file path” olarak `src/app.py` dosyasını seçin.
-4. Uygulama otomatik olarak deploy edilir.
+Bu proje, profesyonel koç Köksal Gürkan için geliştirilmiş bir soru-cevap chatbotudur. 
+Lokal olarak embed edilmiş dokümanlardan yanıt alır ve Streamlit üzerinden çalışır.
+
+## Kurulum ve Kullanım
+
+1. Repository'yi klonla
+2. Python 3.10+ ve virtualenv ile ortam oluştur
+3. Gereksinimleri yükle:
+pip install -r requirements.txt
+
+4. Embed dosyasını oluştur:
+python src/local_embed_create.py
+
+5. Streamlit uygulamasını çalıştır:
+streamlit run src/app.py
+
+
+## Gereksinimler
+- streamlit==1.50.0
+- chromadb==1.2.1
+- sentence-transformers==5.1.1
+- torch==2.5.1
+- pandas==2.2.3
+
 
 ## 🔹 Deploy Linki
-[https://<senin-streamlit-uygulama-linkin>.streamlit.app](https://<senin-streamlit-uygulama-linkin>.streamlit.app)
+[https://<senin-streamlit-uygulama-linkin>.streamlit.app](https://kgkchatbot.streamlit.app/)
 
 ---
 © 2025 Köksal Gürkan Koçluk — Tüm hakları saklıdır.
