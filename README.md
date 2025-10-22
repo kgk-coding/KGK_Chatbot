@@ -71,6 +71,10 @@ Bu proje, profesyonel koç Köksal Gürkan için geliştirilmiş bir soru-cevap 
 ## 🔹 Deploy Linki
 [KGK Koçluk Chatbot](https://kgkchatbot.streamlit.app/)
 
+
+## Bu Uygulamanın Hikayesi
+[Uygulamanın hazırlanma hikayesini buradan okuyabilirsiniz.](https://github.com/kgk-coding/KGK_Chatbot/blob/main/Hikaye.txt)
+
 ---
 © 2025 Köksal Gürkan Koçluk — Tüm hakları saklıdır.
 
