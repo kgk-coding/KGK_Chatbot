@@ -11,7 +11,6 @@ if src_dir not in sys.path:
     sys.path.insert(0, src_dir)
 
 import streamlit as st
-import chromadb
 from ingest import create_chroma_db, debug_print_collection_info
 from rag_chain import retrieve_answer  # kendi RAG mantığını kullan
 
