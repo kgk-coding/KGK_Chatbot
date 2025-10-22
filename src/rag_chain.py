@@ -1,35 +1,24 @@
+import json
 import numpy as np
-from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer
 
-# Modeli yükle
+# Model ve veri
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Soru-cevap verisi
-faq_data = [
-    {"question": "Koçluk almaya uygun muyum?", 
-     "answer": "Genelde çoğu kişi koçluk almaya uygundur. Ancak belirli durumları teyit etmemiz gerekir."},
-    {"question": "Koçluk seansları ne kadar sürer?", 
-     "answer": "Koçluk seansları genellikle 50-60 dakika sürer."},
-    {"question": "Koçluk online olabilir mi?", 
-     "answer": "Evet, koçluk online olarak da yapılabilir."},
-]
+with open("soru_cevap.json", "r", encoding="utf-8") as f:
+    faq_data = json.load(f)
 
-# Embeddingleri hazırla
-questions = [item["question"] for item in faq_data]
-question_embeddings = model.encode(questions)
+faq_questions = [item['soru'] for item in faq_data]
+faq_embeddings = model.encode(faq_questions, convert_to_numpy=True)
 
-def retrieve_answer(user_question, similarity_threshold=0.5):
-    """
-    Kullanıcı sorusuna en uygun cevabı döndürür.
-    Eğer similarity threshold'un altında ise, standart uyarı mesajı döner.
-    """
-    user_embedding = model.encode([user_question])
-    similarities = cosine_similarity(user_embedding, question_embeddings)
+def retrieve_answer(user_question: str) -> str:
+    user_emb = model.encode([user_question], convert_to_numpy=True)
+    similarities = cosine_similarity(user_emb, faq_embeddings)[0]
+
+    threshold = 0.68  # Eşik değeri: gerekirse ayarla
     best_idx = np.argmax(similarities)
-    best_score = similarities[0][best_idx]
-
-    if best_score < similarity_threshold:
+    if similarities[best_idx] >= threshold:
+        return faq_data[best_idx]['cevap']
+    else:
         return "Sorunuzu tam olarak cevaplayamıyorum. Lütfen daha detaylı sorar mısınız?"
-
-    return faq_data[best_idx]["answer"]
