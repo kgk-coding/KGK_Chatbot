@@ -1,67 +1,34 @@
-# src/app.py
+# -*- coding: utf-8 -*-
+# src/local_chat.py
 
-import sys
-import os
+from rag_chain import retrieve_answer
 
-# -----------------------------
-# Streamlit deploy uyumlu modül yolu
-# -----------------------------
-src_dir = os.path.join(os.getcwd(), "src")
-if src_dir not in sys.path:
-    sys.path.insert(0, src_dir)
+def main():
+    print("Koçluk Chatbot")
+    print("Çıkmak için 'exit' yazın")
 
-import streamlit as st
-from ingest import create_chroma_db, debug_print_collection_info
-from rag_chain import retrieve_answer  # kendi RAG mantığını kullan
+    # Dialog memory: Kullanıcının önceki sorularını ve botun cevaplarını geçici olarak tutacağız
+    dialog_memory = []
 
-# -----------------------------
-# Sayfa başlığı ve ikon
-# -----------------------------
-st.set_page_config(page_title="Köksal Gürkan Koçluk Chatbot", page_icon="💬")
+    while True:
+        user_q = input("Sorunuzu yazın: ").strip()
+        if user_q.lower() == "exit":
+            print("Görüşürüz!")
+            break
+        if not user_q:
+            print("Lütfen bir soru yazın.")
+            continue
 
-st.title("💬 Köksal Gürkan Koçluk Chatbot")
-st.write(
-    "Merhaba 👋 Ben Köksal Gürkan Koçluk için oluşturulmuş koçluk odaklı Chatbot'um. "
-    "Koçlukla ilgili temel bilgiler, süreçler, akış, koçluğa uygunluk ve benzeri konularda merak ettiklerini sorabilirsin."
-)
+        try:
+            # Önceki sorular ve cevaplar memory ile kullanılabilir
+            answer = retrieve_answer(user_q, dialog_memory=dialog_memory)
 
-# -----------------------------
-# Chroma DB kontrol ve oluşturma
-# -----------------------------
-PERSIST_DIR = os.path.join(os.getcwd(), "chroma_db")
+            # Memory'ye ekle
+            dialog_memory.append({"question": user_q, "answer": answer})
 
-if not os.path.exists(PERSIST_DIR) or not os.listdir(PERSIST_DIR):
-    with st.spinner("Veritabanı hazırlanıyor..."):
-        create_chroma_db()
+            print("\nCevap:", answer, "\n")
+        except Exception as e:
+            print(f"Hata oluştu: {e}\n")
 
-st.markdown("---")
-
-# -----------------------------
-# DEBUG paneli
-# -----------------------------
-with st.expander("Geliştirici / Debug Kontrolleri (isteğe bağlı)"):
-    if st.button("Veritabanı bilgilerini göster"):
-        info = debug_print_collection_info()
-        st.json(info)
-    st.write("Not: Bu paneli test bitince kaldırabilirsin.")
-
-st.markdown("---")
-
-# -----------------------------
-# Kullanıcı giriş ve yanıt
-# -----------------------------
-user_q = st.text_input("Sorunuzu yazın:", key="user_input")
-
-if st.button("Cevabı Göster"):
-    if user_q.strip():
-        with st.spinner("Düşünüyorum..."):
-            try:
-                answer = retrieve_answer(user_q)
-                st.markdown(answer)
-            except Exception as e:
-                st.error(f"Bir hata oluştu: {e}")
-    else:
-        st.warning("Lütfen bir soru yazın.")
-
-st.markdown("---")
-st.caption("Bu uygulama, Köksal Gürkan Koçluk web sitesine dayalı örnek bir RAG tabanlı chatbot projesidir.")
+if __name__ == "__main__":
+    main()
