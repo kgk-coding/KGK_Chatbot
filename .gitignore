@@ -1,5 +1,20 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
-.vscode/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python packages
+*.egg-info/
+dist/
+build/
+
+# Chroma/DB cache (opsiyonel)
 chroma_db/
-.streamlit/
