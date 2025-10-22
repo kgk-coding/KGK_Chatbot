@@ -1,13 +1,11 @@
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-import json
 
 # Modeli yükle
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Soru-cevap verisi (örnek: json veya list)
-# FAQ formatında
+# Soru-cevap verisi
 faq_data = [
     {"question": "Koçluk almaya uygun muyum?", 
      "answer": "Genelde çoğu kişi koçluk almaya uygundur. Ancak belirli durumları teyit etmemiz gerekir."},
@@ -21,16 +19,17 @@ faq_data = [
 questions = [item["question"] for item in faq_data]
 question_embeddings = model.encode(questions)
 
-def retrieve_answer(user_question, similarity_threshold=0.3):
+def retrieve_answer(user_question, similarity_threshold=0.5):
+    """
+    Kullanıcı sorusuna en uygun cevabı döndürür.
+    Eğer similarity threshold'un altında ise, standart uyarı mesajı döner.
+    """
     user_embedding = model.encode([user_question])
     similarities = cosine_similarity(user_embedding, question_embeddings)
     best_idx = np.argmax(similarities)
+    best_score = similarities[0][best_idx]
 
-    # Esnek eşik: düşükse bile en yakın cevabı ver
-    if similarities[0][best_idx] < similarity_threshold:
-        # En yakın 2 cevabı gösterebiliriz
-        top_indices = similarities[0].argsort()[-2:][::-1]
-        answers = [faq_data[i]["answer"] for i in top_indices]
-        return "Yakın konular:\n- " + "\n- ".join(answers)
+    if best_score < similarity_threshold:
+        return "Cevap: Sorunuzu tam olarak cevaplayamıyorum. Lütfen daha detaylı sorar mısınız?"
 
     return faq_data[best_idx]["answer"]
