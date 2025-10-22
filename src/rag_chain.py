@@ -1,59 +1,63 @@
+# -*- coding: utf-8 -*-
 # src/rag_chain.py
-import os
-import chromadb
+
+import json
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 
-PERSIST_DIR = os.path.join("chroma_db")
-embedder = SentenceTransformer("all-MiniLM-L6-v2")
+# Modeli yükle
+model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
-# Chroma bağlan
-client = chromadb.PersistentClient(path=PERSIST_DIR)
-collection = client.get_or_create_collection("kgk_chatbot")
+# Embed edilmiş verileri yükle
+with open("src/embeddings.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
 
-def retrieve_answer(user_question, k=3):
+if not data:
+    print("⚠️ Uyarı: embeddings.json dosyası boş!")
+else:
+    print(f"✅ {len(data)} doküman yüklendi.")
+
+# Embedding’leri ve metinleri hazırla
+texts = [item["document"] for item in data]
+embeddings = np.array([item["embedding"] for item in data])
+
+
+def retrieve_answer(question, dialog_memory=None):
     """
-    Kullanıcı sorgusunu embed edip Chroma'da arama yapar.
-    Eğer sonuç yoksa uygun mesaj verir; varsa en yakın sonucu alır.
+    Kullanıcının sorusuna en uygun cevabı döndürür.
+    dialog_memory: önceki soru-cevap çiftlerini tutar (isteğe bağlı)
     """
-    if not user_question or user_question.strip() == "":
-        return "Lütfen bir soru yazın."
 
-    q_emb = embedder.encode(user_question).tolist()
+    # Eğer hafızada benzer bir soru varsa önce oraya bakalım
+    if dialog_memory:
+        for entry in reversed(dialog_memory[-3:]):  # son 3 etkileşimi kontrol et
+            if entry["question"].lower() == question.lower():
+                return f"Bunu az önce sormuştunuz: {entry['answer']}"
 
-    # collection.query döndürülen yapıya dikkat et
-    results = collection.query(
-        query_embeddings=[q_emb],
-        n_results=k,
-        include=["documents", "distances"]
-    )
+    # Eğer veritabanı boşsa uyarı ver
+    if embeddings.size == 0:
+        return "Henüz veritabanında embed edilmiş bir doküman yok."
 
-    docs = []
-    distances = []
-    try:
-        docs = results.get("documents", [[]])[0]
-        distances = results.get("distances", [[]])[0]
-    except Exception:
-        docs = []
+    # Soruyu embed et
+    question_embedding = model.encode([question])
 
-    if not docs:
-        # fallback: yakın eşleşme yok
-        return (
-            f"**Soru:** {user_question}\n\n"
-            "Üzgünüm, bu konuda elimde bir bilgi yok. "
-            "Lütfen farklı bir soru deneyin veya web sitemi inceleyin."
-        )
+    # Benzerlikleri hesapla
+    similarities = cosine_similarity(question_embedding, embeddings)[0]
 
-    # en yakın dokümanı al
-    best_doc = docs[0]
-    # docs içinde 'Soru: ...\\nCevap: ...' formatında kayıt var — Cevap kısmını ayıklayalım
-    if "Cevap:" in best_doc:
-        answer = best_doc.split("Cevap:", 1)[1].strip()
+    # En benzer dokümanı bul
+    top_idx = np.argmax(similarities)
+    top_score = similarities[top_idx]
+    best_match = texts[top_idx]
+
+    # Eşik belirle (çok alakasızsa)
+    if top_score < 0.45:
+        return "Bu konuyla ilgili doğrudan bir bilgi bulamadım. Ne hakkında konuştuğunu biraz daha açar mısın?"
+
+    # Dokümandan cevabı çıkar
+    if "Cevap:" in best_match:
+        answer = best_match.split("Cevap:")[1].strip()
     else:
-        answer = best_doc.strip()
+        answer = best_match
 
-    response = (
-        f"**Soru:** {user_question}\n\n"
-        f"**Cevap:** {answer}\n\n"
-        "Eğer daha kapsamlı bir destek istersen, koçluk görüşmeleri hakkında bilgi almak için web sitemi ziyaret edebilirsin."
-    )
-    return response
+    return answer
