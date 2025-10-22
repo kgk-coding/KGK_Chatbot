@@ -1,33 +1,21 @@
 import json
 import numpy as np
+from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# JSON dosyasını yükle
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# embeddings.json dosyasını yükle
 with open("data/embeddings.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
-# Dokümanlardan embedding ve metinleri ayır
 documents = [item["document"] for item in data]
 embeddings = np.array([item["embedding"] for item in data])
 
-def retrieve_answer(query_embedding, top_k=1):
-    """
-    Soru embedding'ini alır, cosine similarity ile en benzer dokümanı bulur.
-    """
-    if embeddings.size == 0:
-        return "Henüz veritabanında embed edilmiş bir doküman yok."
-
-    # Cosine similarity hesapla
-    similarities = cosine_similarity([query_embedding], embeddings)[0]
-    top_indices = similarities.argsort()[-top_k:][::-1]
-
-    # En benzer dokümanı döndür
-    response = documents[top_indices[0]]
-    return response
-
-def embed_query(query, embed_func):
-    """
-    Soru cümlesini embedding'e çevirir.
-    embed_func: embedding hesaplama fonksiyonu (örn: OpenAI veya SentenceTransformer)
-    """
-    return embed_func(query)
+def retrieve_answer(question: str, top_k: int = 1):
+    q_emb = model.encode([question])
+    similarities = cosine_similarity(q_emb, embeddings)[0]
+    top_idx = np.argsort(similarities)[::-1][:top_k]
+    if similarities[top_idx[0]] < 0.3:
+        return "Bu konuyla ilgili doğrudan bir bilgi bulamadım. Ne hakkında konuştuğunu biraz daha açar mısın?"
+    return documents[top_idx[0]]
