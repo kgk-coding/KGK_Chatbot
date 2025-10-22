@@ -6,6 +6,7 @@ st.title("KGK Koçluk Chatbot")
 st.write(
     "Merhaba ߑˠBen Köksal Gürkan Koçluk için oluşturulmuş koçluk odaklı Chatbot'um. "
     "Koçlukla ilgili temel bilgiler, süreçler, akış, koçluğa uygunluk ve benzeri konularda merak ettiklerini sorabilirsin."
+    ""
 )
 
 
@@ -20,5 +21,5 @@ if user_input:
     st.write(answer)
 
 st.markdown("---")
-st.caption("Bu uygulama, Köksal Gürkan Koçluk web sitesine dayalı örnek bir RAG tabanlı chatbot projesidir.")
+st.caption("Bu uygulama, [Köksal Gürkan Koçluk](https://www.koksalgurkan.com.tr/) web sitesine dayalı örnek bir RAG tabanlı chatbot projesidir.")
 
