@@ -1,8 +1,15 @@
+# Streamlit
 streamlit==1.50.0
+
+# Chroma DB for local embeddings storage
 chromadb==1.2.1
-sentence-transformers==2.2.0
-torch==2.9.0
-pandas==2.2.3
-numpy>=1.26.0,<2.4.0
-huggingface-hub>=0.16.4
-transformers>=4.35.0
+
+# Sentence Transformers (Python 3.13 uyumlu)
+sentence-transformers>=2.3.0
+
+# Torch uyumu (sentence-transformers ile)
+torch>=2.5.1
+
+# Veri işleme
+pandas>=2.2.3
+numpy>=1.26.0
