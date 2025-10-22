@@ -2,10 +2,9 @@ import os
 import json
 from sentence_transformers import SentenceTransformer
 
-# Modeli yükle
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Örnek dokümanlar (lokal olarak değiştirebilirsin)
+# Örnek dokümanlar
 docs = [
     {
         "id": "doc_0",
@@ -17,14 +16,11 @@ docs = [
     },
 ]
 
-# Embedleri oluştur
 for item in docs:
     item["embedding"] = model.encode(item["document"]).tolist()
 
-# data klasörünü oluştur
 os.makedirs("data", exist_ok=True)
 
-# JSON olarak kaydet
 with open("data/embeddings.json", "w", encoding="utf-8") as f:
     json.dump(docs, f, ensure_ascii=False, indent=4)
 
