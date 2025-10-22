@@ -4,7 +4,6 @@ import re
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-# 🔹 Dosya yolları mutlak hale getirildi
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PERSIST_DIR = os.path.join(BASE_DIR, "chroma_db")
 DATA_PATH = os.path.join(BASE_DIR, "data", "soru_cevap.md")
@@ -12,10 +11,6 @@ DATA_PATH = os.path.join(BASE_DIR, "data", "soru_cevap.md")
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
 def create_chroma_db():
-    """
-    data/soru_cevap.md içindeki soru-cevap çiftlerini algılayıp Chroma'ya ekler.
-    Regex kullanıldığı için satır boşluklarından veya format farklarından etkilenmez.
-    """
     os.makedirs(PERSIST_DIR, exist_ok=True)
     client = chromadb.PersistentClient(path=PERSIST_DIR)
     collection = client.get_or_create_collection("kgk_chatbot")
@@ -33,9 +28,14 @@ def create_chroma_db():
         print(f"⚠️ Veri dosyası bulunamadı: {DATA_PATH}")
         return
 
-    with open(DATA_PATH, "r", encoding="utf-8") as f:
+    # 💡 UTF-8-SIG ile aç (BOM karakterini yok sayar)
+    with open(DATA_PATH, "r", encoding="utf-8-sig") as f:
         content = f.read()
 
+    print("DEBUG >>> Dosya uzunluğu:", len(content))
+    print("DEBUG >>> İlk 200 karakter:", content[:200].replace("\n", " "))
+
+    # Regex ile soru-cevap bloklarını yakala
     pattern = r"\*\*Soru:\*\*\s*(.*?)\s*\*\*Cevap:\*\*\s*(.*?)(?=\n\s*\*\*Soru:\*\*|$)"
     matches = re.findall(pattern, content, re.DOTALL)
 
@@ -58,9 +58,6 @@ def create_chroma_db():
     print(f"✅ {len(documents)} kayıt başarıyla ChromaDB'ye eklendi.")
 
 def debug_print_collection_info():
-    """
-    Debug için ChromaDB'deki kayıt sayısı ve örnek kayıtları döndürür.
-    """
     client = chromadb.PersistentClient(path=PERSIST_DIR)
     collection = client.get_or_create_collection("kgk_chatbot")
     try:
