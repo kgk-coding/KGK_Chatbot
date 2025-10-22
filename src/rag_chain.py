@@ -1,21 +1,25 @@
-import json
-import numpy as np
 from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+from .embed_utils import load_embeddings, cosine_similarity
 
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# Model initialization
+model = SentenceTransformer("all-MiniLM-L6-v2")
 
-# embeddings.json dosyasını yükle
-with open("data/embeddings.json", "r", encoding="utf-8") as f:
-    data = json.load(f)
+# Load JSON embeddings once at start
+embeddings, documents = load_embeddings()
 
-documents = [item["document"] for item in data]
-embeddings = np.array([item["embedding"] for item in data])
+def embed_query(query):
+    return model.encode(query)
 
-def retrieve_answer(question: str, top_k: int = 1):
-    q_emb = model.encode([question])
-    similarities = cosine_similarity(q_emb, embeddings)[0]
-    top_idx = np.argsort(similarities)[::-1][:top_k]
-    if similarities[top_idx[0]] < 0.3:
+def retrieve_answer(query, top_k=1):
+    query_vec = embed_query(query)
+    if not embeddings:
+        return "Henüz veritabanında embed edilmiş bir doküman yok."
+    
+    similarities = [cosine_similarity(query_vec, emb) for emb in embeddings]
+    best_idx = int(np.argmax(similarities))
+    
+    if similarities[best_idx] < 0.5:  # eşik, düşük benzerlik olursa yanıt yok
         return "Bu konuyla ilgili doğrudan bir bilgi bulamadım. Ne hakkında konuştuğunu biraz daha açar mısın?"
-    return documents[top_idx[0]]
+    
+    return documents[best_idx]
