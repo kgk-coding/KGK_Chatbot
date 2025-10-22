@@ -90,4 +90,3 @@
 
 **Soru:** Eşimle/arkadaşımla birlikte koçluk alabilir miyim?
 **Cevap:** Koçluk bireysel, grup ve takım koçluğu şeklinde farklı şekillerde olabilir. Sizin konunuz ve amacınız ortaksa birlikte koçluk için grup veya takım koçluğu olarak ele alabiliriz. Değilse ayrı ayrı koçluklar olarak düşünmek daha doğru olur. Neden birlikte koçluk almak istediğinize göre konuşup konuyu değerlendirelim. Bana [iletişim](https://www.koksalgurkan.com.tr/iletisim/) sayfamdan ulaşın, hep birlikte konuşalım.
-
