@@ -6,7 +6,7 @@ from sentence_transformers import SentenceTransformer
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PERSIST_DIR = os.path.join(BASE_DIR, "chroma_db")
-DATA_PATH = os.path.join(BASE_DIR, "data", "soru_cevap.md")
+DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "soru_cevap.md")
 
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
