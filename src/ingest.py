@@ -4,16 +4,32 @@ import re
 import chromadb
 from sentence_transformers import SentenceTransformer
 
+# Klasör yollarını ayarla
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SRC_DIR = os.path.dirname(os.path.abspath(__file__))
 PERSIST_DIR = os.path.join(BASE_DIR, "chroma_db")
-DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "soru_cevap.md")
+DATA_PATH = os.path.join(SRC_DIR, "soru_cevap.md")  # src klasöründe
 
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
+
 def create_chroma_db():
+    """Markdown dosyasını okuyup ChromaDB oluşturur."""
     os.makedirs(PERSIST_DIR, exist_ok=True)
     client = chromadb.PersistentClient(path=PERSIST_DIR)
     collection = client.get_or_create_collection("kgk_chatbot")
+
+    # === DEBUG BLOĞU ===
+    print("DEBUG >>> Çalışma dizini:", os.getcwd())
+    print("DEBUG >>> BASE_DIR:", BASE_DIR)
+    print("DEBUG >>> SRC_DIR:", SRC_DIR)
+    print("DEBUG >>> Aranan dosya yolu:", DATA_PATH)
+    print("DEBUG >>> Dosya mevcut mu?", os.path.exists(DATA_PATH))
+    if os.path.exists(DATA_PATH):
+        print("DEBUG >>> Dosya boyutu:", os.path.getsize(DATA_PATH))
+    else:
+        print("DEBUG >>> SRC dizininde mevcut dosyalar:", os.listdir(SRC_DIR))
+    # ====================
 
     try:
         count = collection.count()
@@ -50,26 +66,3 @@ def create_chroma_db():
         answer = answer.strip()
         doc_text = f"Soru: {question}\nCevap: {answer}"
         documents.append(doc_text)
-        embeddings.append(embedder.encode(doc_text).tolist())
-        ids.append(f"q_{i}")
-
-    collection.add(ids=ids, documents=documents, embeddings=embeddings)
-    client.persist()
-    print(f"✅ {len(documents)} kayıt başarıyla ChromaDB'ye eklendi.")
-
-def debug_print_collection_info():
-    client = chromadb.PersistentClient(path=PERSIST_DIR)
-    collection = client.get_or_create_collection("kgk_chatbot")
-    try:
-        count = collection.count()
-    except Exception:
-        count = 0
-
-    sample_docs = []
-    if count > 0:
-        res = collection.get(limit=3, include=["documents"])
-        sample_docs = res.get("documents", [])
-
-    info = {"count": count, "sample_documents": sample_docs}
-    print(f"DEBUG >>> {info}")
-    return info
