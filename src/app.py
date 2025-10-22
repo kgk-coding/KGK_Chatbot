@@ -4,10 +4,13 @@ import sys
 import os
 
 # -----------------------------
-# Modül yolu ayarı
+# Modül yolu ayarı (Streamlit için kesin çözüm)
 # -----------------------------
-# app.py hangi dizinde olursa olsun src içindeki modülleri bulabilmesi için
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# app.py hangi dizinde çalıştırılırsa çalıştırılsın src altındaki modüller bulunacak
+repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+src_dir = os.path.join(repo_root, "src")
+if src_dir not in sys.path:
+    sys.path.insert(0, src_dir)
 
 import streamlit as st
 import chromadb
@@ -28,7 +31,7 @@ st.write(
 # -----------------------------
 # Chroma DB yolu ve oluşturulması
 # -----------------------------
-PERSIST_DIR = os.path.join("chroma_db")
+PERSIST_DIR = os.path.join(repo_root, "chroma_db")
 
 if not os.path.exists(PERSIST_DIR) or not os.listdir(PERSIST_DIR):
     with st.spinner("Veritabanı hazırlanıyor..."):
