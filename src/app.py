@@ -6,7 +6,7 @@ import os
 # -----------------------------
 # Streamlit deploy uyumlu modül yolu ayarı
 # -----------------------------
-# Streamlit her zaman repo kökünden çalıştırıyor, bu yüzden src dizinini direkt ekliyoruz
+# Streamlit her zaman repo kökünden çalıştırıyor, src dizinini Python path'e ekliyoruz
 src_dir = os.path.join(os.getcwd(), "src")
 if src_dir not in sys.path:
     sys.path.insert(0, src_dir)
@@ -14,7 +14,7 @@ if src_dir not in sys.path:
 import streamlit as st
 import chromadb
 from ingest import create_chroma_db, debug_print_collection_info
-from rag_chain import retrieve_answer
+from rag_chain import retrieve_answer  # kendi RAG mantığını kullan
 
 # -----------------------------
 # Sayfa başlığı ve ikon
