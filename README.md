@@ -36,6 +36,7 @@ Data seti tamamen https://www.koksalgurkan.com.tr/ sitesi ve kişisel deneyimler
     ├─ runtime.txt
     ├─ .gitignore
     ├─ setup.sh
+    ├─ Hikaye.md
     └─ README.md
 
 ---
