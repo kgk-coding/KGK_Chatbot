@@ -17,25 +17,25 @@ Data seti tamamen https://www.koksalgurkan.com.tr/ sitesi ve kişisel deneyimler
 ---
 ## 🔹 Dosya Yapısı
 
-KGK_Chatbot/
-│
-├─ src/
-│   ├─ __init__.py
-│   ├─ app.py                # Streamlit uygulaması
-│   ├─ rag_chain.py          # Embed ve retrieval mantığı
-│   └─ local_embed_create.py # JSON embed dosyası oluşturma
-│
-├─ data/
-│   └─ soru_cevap.json       # Lokalde ürettiğimm embed dosyası
-│
-├─ chroma_db/
-│   └─ .keep                 # Boş klasör için git track
-│
-├─ requirements.txt
-├─ runtime.txt
-├─ .gitignore
-├─ setup.sh
-└─ README.md
+    KGK_Chatbot/
+    │
+    ├─ src/
+    │   ├─ __init__.py
+    │   ├─ app.py                # Streamlit uygulaması
+    │   ├─ rag_chain.py          # Embed ve retrieval mantığı
+    │   └─ local_embed_create.py # JSON embed dosyası oluşturma
+    │
+    ├─ data/
+    │   └─ soru_cevap.json       # Lokalde ürettiğimm embed dosyası
+    │
+    ├─ chroma_db/
+    │   └─ .keep                 # Boş klasör için git track
+    │
+    ├─ requirements.txt
+    ├─ runtime.txt
+    ├─ .gitignore
+    ├─ setup.sh
+    └─ README.md
 
 ---
 # KGK Chatbot
