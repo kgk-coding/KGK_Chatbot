@@ -99,7 +99,8 @@ Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
 
 
 **Kullanıcı Sorusu 5**
-      Soruyu cevaplayamadığı zaman geriye standart bir cevap döndürüyor.
+
+        Soruyu cevaplayamadığı zaman geriye standart bir cevap döndürüyor.
       
       - Soru: aaaaa
       - Cevap: Sorunuzu tam olarak cevaplayamıyorum. Lütfen daha detaylı sorar mısınız?
