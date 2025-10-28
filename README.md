@@ -111,6 +111,9 @@ Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
 
 ---
 ## 🚀 Deploy Linki
+
+> *Not: Uygulama linki Streamlit Cloud üzerinden çalışmaktadır.*
+
 [KGK Koçluk Chatbot](https://kgkchatbot.streamlit.app/)
 
 ---
