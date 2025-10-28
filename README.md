@@ -40,8 +40,10 @@ Data seti tamamen https://www.koksalgurkan.com.tr/ sitesi ve kişisel deneyimler
 ---
 # KGK Chatbot
 
-Bu proje, profesyonel koç Köksal Gürkan için geliştirilmiş bir soru-cevap chatbotudur. 
+Bu proje, profesyonel koç Köksal Gürkan için geliştirilmiş bir soru-cevap chatbotudur.
+
 Özel hazırlanmış soru setininden oluşturulmuş json dosyasından yanıt alır ve Streamlit üzerinden çalışır.
+
 Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
 
 ---
