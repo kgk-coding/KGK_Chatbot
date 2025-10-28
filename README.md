@@ -37,11 +37,17 @@ KGK_Chatbot/
 └─ README.md
 
 
-
 # KGK Chatbot
 
 Bu proje, profesyonel koç Köksal Gürkan için geliştirilmiş bir soru-cevap chatbotudur. 
 Özel hazırlanmış soru setininden oluşturulmuş json dosyasından yanıt alır ve Streamlit üzerinden çalışır.
+Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
+
+
+# KGK Chatbot Ekran Görüntüsü
+
+<img width="973" height="742" alt="resim" src="https://github.com/user-attachments/assets/5a4b729d-6f36-4626-989b-9fb004da1610" />
+
 
 ## Kurulum ve Kullanım
 
@@ -51,7 +57,6 @@ Bu proje, profesyonel koç Köksal Gürkan için geliştirilmiş bir soru-cevap 
     pip install -r requirements.txt
 4. Streamlit uygulamasını çalıştır:
     streamlit run src/app.py
-
 
 ## Gereksinimler
   - huggingface_hub==0.16.4
@@ -66,6 +71,24 @@ Bu proje, profesyonel koç Köksal Gürkan için geliştirilmiş bir soru-cevap 
   - markdown-it-py==4.0.0
   - mdurl==0.1.2
   - pygments==2.19.2
+
+
+## Örnek Sorular
+  - Soru: Merhaba
+  - Cevap: Sana da Merhaba! Koçlukla ilgili sorularını yazarsan cevaplayabilirim.
+
+  - Soru: Test
+  - Cevap: Merak etme çalışıyor! Koçlukla ilgili sorularını sorduğunda cevap alabilirsin.
+
+  - Soru: Deneme
+  - Cevap: Çalışıp çalışmadığını merak ediyorsan koçlukla ilgili soru sorabilirsin. :)
+
+  - Soru: Koçluk almaya uygun muyum?
+  - Cevap: Genelde çoğu kişi koçluk almaya uygundur. Ancak belirli referans durumları teyit etmemiz gerekir ki bundan emin olalım.
+
+    Soruyu cevaplayamadığı zaman geriye standart bir cevap döndürüyor.
+  - Soru: aaaaa
+  - Cevap: Sorunuzu tam olarak cevaplayamıyorum. Lütfen daha detaylı sorar mısınız?
 
 
 ## 🔹 Deploy Linki
