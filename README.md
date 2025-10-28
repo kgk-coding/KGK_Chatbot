@@ -118,7 +118,7 @@ Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
 
 ---
 ## 🔎 Bu Uygulamanın Hikayesi
-[Uygulamanın hazırlanma hikayesini buradan okuyabilirsiniz.](https://github.com/kgk-coding/KGK_Chatbot/blob/main/Hikaye.txt)
+[Uygulamanın hazırlanma hikayesini buradan okuyabilirsiniz.](https://github.com/kgk-coding/KGK_Chatbot/blob/main/Hikaye.md)
 
 ---
 © 2025 Köksal Gürkan Koçluk — Tüm hakları saklıdır.
