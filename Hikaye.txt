@@ -1,4 +1,4 @@
-**Bu Uygulamanın Hikayesi**
+Bu Uygulamanın Hikayesi
 
 Python bilmiyordum. Geçmiş yazılım tecrübem sınırlıydı. Önceki eğitimlere katılmamıştım. Buradaki eğitimlerde ne gördüysem onlarla hareket ettim.
 
