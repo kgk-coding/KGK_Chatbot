@@ -4,7 +4,7 @@ Bu proje, **Köksal Gürkan Koçluk** için oluşturulmuş RAG tabanlı bir chat
 Amaç, Köksal Gürkan Koçluk için web sitesi üzerinden koçluk hakkında sık sorulan sorulara hızlı, doğal ve bilgilendirici yanıtlar sunmaktır.
 Data seti tamamen https://www.koksalgurkan.com.tr/ sitesi ve kişisel deneyimlere dayalı hazırlanmış özel içerikten oluşmaktadır.
 
-
+---
 ## 🔹 Proje Özeti
 - **Proje Adı:** Koçluk için Chatbot  
 - **Amaç:** RAG (Retrieval Augmented Generation) mantığıyla bilgiye dayalı yanıtlar üretmek.  
@@ -14,6 +14,7 @@ Data seti tamamen https://www.koksalgurkan.com.tr/ sitesi ve kişisel deneyimler
 - **Web Arayüzü:** Streamlit  
 - **Bulut Ortamı:** [Streamlit Community Cloud](https://streamlit.app)
 
+---
 ## 🔹 Dosya Yapısı
 
 KGK_Chatbot/
@@ -36,19 +37,19 @@ KGK_Chatbot/
 ├─ setup.sh
 └─ README.md
 
-
+---
 # KGK Chatbot
 
 Bu proje, profesyonel koç Köksal Gürkan için geliştirilmiş bir soru-cevap chatbotudur. 
 Özel hazırlanmış soru setininden oluşturulmuş json dosyasından yanıt alır ve Streamlit üzerinden çalışır.
 Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
 
-
+---
 # KGK Chatbot Ekran Görüntüsü
 
 <img width="973" height="742" alt="resim" src="https://github.com/user-attachments/assets/5a4b729d-6f36-4626-989b-9fb004da1610" />
 
-
+---
 ## Kurulum ve Kullanım
 
 1. Repository'yi klonla
@@ -58,6 +59,7 @@ Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
 4. Streamlit uygulamasını çalıştır:
     streamlit run src/app.py
 
+---
 ## Gereksinimler
   - huggingface_hub==0.16.4
   - sentence-transformers==2.2.2
@@ -72,7 +74,7 @@ Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
   - mdurl==0.1.2
   - pygments==2.19.2
 
-
+---
 ## Örnek Sorular
   - Soru: Merhaba
   - Cevap: Sana da Merhaba! Koçlukla ilgili sorularını yazarsan cevaplayabilirim.
@@ -90,11 +92,11 @@ Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
   - Soru: aaaaa
   - Cevap: Sorunuzu tam olarak cevaplayamıyorum. Lütfen daha detaylı sorar mısınız?
 
-
+---
 ## 🔹 Deploy Linki
 [KGK Koçluk Chatbot](https://kgkchatbot.streamlit.app/)
 
-
+---
 ## Bu Uygulamanın Hikayesi
 [Uygulamanın hazırlanma hikayesini buradan okuyabilirsiniz.](https://github.com/kgk-coding/KGK_Chatbot/blob/main/Hikaye.txt)
 
