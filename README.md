@@ -77,7 +77,7 @@ Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
 ---
 ## Örnek Sorular
 
-***Kullanıcı Sorusu 1**
+**Kullanıcı Sorusu 1**
   - Soru: Merhaba
   - Cevap: Sana da Merhaba! Koçlukla ilgili sorularını yazarsan cevaplayabilirim.
 **Kullanıcı Sorusu 2**
