@@ -27,7 +27,7 @@ Data seti tamamen https://www.koksalgurkan.com.tr/ sitesi ve kişisel deneyimler
     │   └─ local_embed_create.py # JSON embed dosyası oluşturma
     │
     ├─ data/
-    │   └─ soru_cevap.json       # Lokalde ürettiğimm embed dosyası
+    │   └─ soru_cevap.json       # Lokalde ürettiğim embed dosyası
     │
     ├─ chroma_db/
     │   └─ .keep                 # Boş klasör için git track
