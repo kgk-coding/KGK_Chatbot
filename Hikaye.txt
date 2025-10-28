@@ -1,4 +1,4 @@
-Bu Uygulamanın Hikayesi
+**Bu Uygulamanın Hikayesi**
 
 Python bilmiyordum. Geçmiş yazılım tecrübem sınırlıydı. Önceki eğitimlere katılmamıştım. Buradaki eğitimlerde ne gördüysem onlarla hareket ettim.
 
@@ -6,7 +6,7 @@ Python bilmiyordum. Geçmiş yazılım tecrübem sınırlıydı. Önceki eğitim
 
 ChatGPT destekli bir projeyi kendi başınıza yaparsınız denince ona odaklandım.
 
-Önerilen örneklerden referansla Github+Gemini+Hugging Face Spaces ile yapayım dedim. bir kaç kere yapsam da sorunlar çıktı. HF Spaces ile Github eşleştirme yapamadım. HF'ye kodları yükledim. Orada birçok değişiklik yaptım. Tam çalışacakken Gemini token sıkıntısı çıktı.
+Önerilen örneklerden referansla "Github + Gemini + Hugging Face Spaces" ile yapayım dedim. bir kaç kere yapsam da sorunlar çıktı. HF Spaces ile Github eşleştirme yapamadım. HF'ye kodları yükledim. Orada birçok değişiklik yaptım. Tam çalışacakken Gemini token sıkıntısı çıktı.
 
 Daha sonra doğrudan Streamlit kullanımına döndüm. Ücretsiz çözümlere yöneldim.
 
