@@ -76,24 +76,23 @@ Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
 
 ---
 ## Örnek Sorular
----
+
 **Kullanıcı Sorusu 1**
----
+
       - Soru: Merhaba
       - Cevap: Sana da Merhaba! Koçlukla ilgili sorularını yazarsan cevaplayabilirim.
 ---
 **Kullanıcı Sorusu 2**
----
+
       - Soru: Test
       - Cevap: Merak etme çalışıyor! Koçlukla ilgili sorularını sorduğunda cevap alabilirsin.
 ---
 **Kullanıcı Sorusu 3**
----
+
       - Soru: Deneme
       - Cevap: Çalışıp çalışmadığını merak ediyorsan koçlukla ilgili soru sorabilirsin. :)
 ---
 **Kullanıcı Sorusu 4**
----
     
       - Soru: Koçluk almaya uygun muyum?
       - Cevap: Genelde çoğu kişi koçluk almaya uygundur. Ancak belirli referans durumları teyit etmemiz gerekir ki bundan emin olalım.
