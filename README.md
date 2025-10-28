@@ -4,6 +4,7 @@ Bu proje, **Köksal Gürkan Koçluk** için oluşturulmuş RAG tabanlı bir chat
 Amaç, Köksal Gürkan Koçluk için web sitesi üzerinden koçluk hakkında sık sorulan sorulara hızlı, doğal ve bilgilendirici yanıtlar sunmaktır.
 Data seti tamamen https://www.koksalgurkan.com.tr/ sitesi ve kişisel deneyimlere dayalı hazırlanmış özel içerikten oluşmaktadır.
 
+
 ---
 ## 🔹 Proje Özeti
 - **Proje Adı:** Koçluk için Chatbot  
@@ -38,7 +39,7 @@ Data seti tamamen https://www.koksalgurkan.com.tr/ sitesi ve kişisel deneyimler
     └─ README.md
 
 ---
-# KGK Chatbot
+## 🔹 KGK Chatbot
 
 Bu proje, profesyonel koç Köksal Gürkan için geliştirilmiş bir soru-cevap chatbotudur.
 
@@ -47,12 +48,12 @@ Bu proje, profesyonel koç Köksal Gürkan için geliştirilmiş bir soru-cevap 
 Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
 
 ---
-# KGK Chatbot Ekran Görüntüsü
+## 🔹 KGK Chatbot Ekran Görüntüsü
 
 <img width="973" height="742" alt="resim" src="https://github.com/user-attachments/assets/5a4b729d-6f36-4626-989b-9fb004da1610" />
 
 ---
-## Kurulum ve Kullanım
+## 🔹 Kurulum ve Kullanım
 
 1. Repository'yi klonla
 2. Python 3.10+ ve virtualenv ile ortam oluştur
@@ -62,7 +63,7 @@ Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
     streamlit run src/app.py
 
 ---
-## Gereksinimler
+## 🔹 Gereksinimler
   - huggingface_hub==0.16.4
   - sentence-transformers==2.2.2
   - torch==2.2.0
@@ -77,7 +78,7 @@ Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
   - pygments==2.19.2
 
 ---
-## Örnek Sorular
+## 🔹 Örnek Sorular
 
 **Kullanıcı Sorusu 1**
 
@@ -113,7 +114,7 @@ Soru yazılıp enter'a basıldığında cevap sorunun alt kısmında görünür.
 [KGK Koçluk Chatbot](https://kgkchatbot.streamlit.app/)
 
 ---
-## Bu Uygulamanın Hikayesi
+## 🔹 Bu Uygulamanın Hikayesi
 [Uygulamanın hazırlanma hikayesini buradan okuyabilirsiniz.](https://github.com/kgk-coding/KGK_Chatbot/blob/main/Hikaye.txt)
 
 ---
